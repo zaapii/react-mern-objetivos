@@ -41,16 +41,14 @@ const updateGoal = asyncHandler(async (req, res) => {
         throw new Error('Objetivo no encontrado')
     }
 
-    const user = await User.findById(req.user.id)
-
     //chequear el usuario
-    if(!user){
+    if(!req.user){
         res.status(401)
         throw new Error('Usuario no encontrado')
     }
 
     //chequear que cada usuario pueda borrar solo sus objetivos
-    if(goal.user.toString() !== user.id)
+    if(goal.user.toString() !== req.user.id)
     {
         res.status(401)
         throw new Error('No autorizado')
@@ -71,16 +69,14 @@ const deleteGoal = asyncHandler(async (req, res) => {
         throw new Error('Objetivo no encontrado')
     }
 
-    const user = await User.findById(req.user.id)
-
     //chequear el usuario
-    if(!user){
+    if(!req.user){
         res.status(401)
         throw new Error('Usuario no encontrado')
     }
 
     //chequear que cada usuario pueda borrar solo sus objetivos
-    if(goal.user.toString() !== user.id)
+    if(goal.user.toString() !== req.user.id)
     {
         res.status(401)
         throw new Error('No autorizado')
