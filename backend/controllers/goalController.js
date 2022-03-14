@@ -1,13 +1,14 @@
 const asyncHandler = require('express-async-handler')
 const { update } = require('../models/goalModel')
 const Goal  = require('../models/goalModel')
+const User  = require('../models/userModel')
 
 // @desc Get goals
 // @route GET /api/goals
 // @access Private
 const getGoals = asyncHandler(async (req, res) => {
 
-    const goals = await Goal.find()
+    const goals = await Goal.find({user: req.user.id})
 
     res.status(200).json(goals)
 })
@@ -22,7 +23,8 @@ const setGoal = asyncHandler(async (req, res) => {
     }
 
     const goal = await Goal.create({
-        text: req.body.text
+        text: req.body.text,
+        user: req.user.id
     })
 
     res.status(200).json(goal)
@@ -39,6 +41,21 @@ const updateGoal = asyncHandler(async (req, res) => {
         throw new Error('Objetivo no encontrado')
     }
 
+    const user = await User.findById(req.user.id)
+
+    //chequear el usuario
+    if(!user){
+        res.status(401)
+        throw new Error('Usuario no encontrado')
+    }
+
+    //chequear que cada usuario pueda borrar solo sus objetivos
+    if(goal.user.toString() !== user.id)
+    {
+        res.status(401)
+        throw new Error('No autorizado')
+    }
+
     const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, {new: true})
     res.status(200).json(updatedGoal)
 })
@@ -52,6 +69,21 @@ const deleteGoal = asyncHandler(async (req, res) => {
     if(!goal){
         res.status(400)
         throw new Error('Objetivo no encontrado')
+    }
+
+    const user = await User.findById(req.user.id)
+
+    //chequear el usuario
+    if(!user){
+        res.status(401)
+        throw new Error('Usuario no encontrado')
+    }
+
+    //chequear que cada usuario pueda borrar solo sus objetivos
+    if(goal.user.toString() !== user.id)
+    {
+        res.status(401)
+        throw new Error('No autorizado')
     }
 
     await goal.remove()
