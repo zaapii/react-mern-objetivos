@@ -91,6 +91,8 @@ function Login() {
               <button type="submit" className="btn btn-block">Ingresar</button>
           </div>
         </form>
+
+        <div className="div">¿No tienes una cuenta? <a href={navigate('/register')}></a> </div>
       </section>
     </>
   );
