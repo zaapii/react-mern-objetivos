@@ -92,7 +92,7 @@ function Login() {
           </div>
         </form>
 
-        <div className="div">¿No tienes una cuenta? <a href={navigate('/register')}></a> </div>
+        <div className="div">¿No tienes una cuenta? <a href={navigate('/register')}> Registrarse </a> </div>
       </section>
     </>
   );

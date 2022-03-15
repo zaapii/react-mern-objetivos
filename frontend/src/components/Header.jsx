@@ -31,7 +31,7 @@ function Header() {
         </li>
 
         <li>
-        <Link to='/register'><FaUser /> Salir </Link>
+        <Link to='/register'><FaUser /> Registrarse </Link>
         </li>
         </>) }
     </ul>
